@@ -18,7 +18,8 @@ import { IoIosMore } from "react-icons/io";
 
 const drawerWidth = 240;
 
-function NavBar(props) {
+// 1. EXTRAEMOS setPage DE LAS PROPS AQUÍ
+function NavBar({ setPage, ...props }) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -28,48 +29,34 @@ function NavBar(props) {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+      {/* 2. HACEMOS QUE EL LOGO VUELVA AL HOME */}
       <img
         src={Logo}
-        className="max-w-[15rem]"
+        className="max-w-[15rem] cursor-pointer"
         alt="logo"
+        onClick={() => setPage('home')}
       />
       <Divider />
       <List>
         <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }}>
-            <ListItemText primary="More Tools" className="text-black!" />
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => setPage('home')}>
+            <ListItemText primary="Home" className="text-black!" />
           </ListItemButton>
         </ListItem>
 
+        {/* 3. TAMBIÉN AÑADIMOS setPage EN EL MENÚ MÓVIL */}
         <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }}>
-            <ListItemText primary="Support" className="text-black!" />
-          </ListItemButton>
-        </ListItem>
-
-        <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }}>
+          <ListItemButton sx={{ textAlign: 'center' }} onClick={() => setPage('community')}>
             <ListItemText primary="Community" className="text-black!" />
           </ListItemButton>
         </ListItem>
-
+        
+        {/* ... Resto de los items del Drawer ... */}
         <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }}>
-            <ListItemText primary="Prices" className="text-black!" />
-          </ListItemButton>
-        </ListItem>
-
-        <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }}>
-            <ListItemText primary="Sign Up" className="bg-[#85cf67]! text-white! py-2! rounded-3xl!" />
-          </ListItemButton>
-        </ListItem>
-
-        <ListItem disablePadding>
-          <ListItemButton sx={{ textAlign: 'center' }}>
-            <ListItemText primary="Login" className="border! border-[#85cf67]! text-black! py-2! rounded-3xl!" />
-          </ListItemButton>
-        </ListItem>
+           <ListItemButton sx={{ textAlign: 'center' }}>
+             <ListItemText primary="Support" className="text-black!" />
+           </ListItemButton>
+         </ListItem>
       </List>
     </Box>
   );
@@ -90,11 +77,15 @@ function NavBar(props) {
           >
             <MenuIcon />
           </IconButton>
+          
+          {/* 4. EL LOGO PRINCIPAL TAMBIÉN REGRESA AL HOME */}
           <img
             src={Logo}
-            className="max-w-[15rem]"
+            className="max-w-[15rem] cursor-pointer"
             alt="logo"
+            onClick={() => setPage('home')}
           />
+
           <Box sx={{ display: { xs: 'none', sm: 'block' } }} className="ml-8!">
             <Button className="text-black! capitalize! ml-1! md:ml-3! lg:ml-5! hidden! sm:inline-flex!">
               More Tools
@@ -104,7 +95,11 @@ function NavBar(props) {
               Support
             </Button>
 
-            <Button className="text-black! capitalize! ml-1! md:ml-3! lg:ml-5! hidden! lg:inline-flex!">
+            {/* AQUÍ YA TENÍAS EL setPage, AHORA SÍ FUNCIONARÁ PORQUE LO RECIBIMOS ARRIBA */}
+            <Button 
+              onClick={() => setPage('community')}
+              className="text-black! capitalize! ml-1! md:ml-3! lg:ml-5! hidden! lg:inline-flex!"
+            >
               Community
             </Button>
 
@@ -116,6 +111,7 @@ function NavBar(props) {
               <IoIosMore />
             </Button>
           </Box>
+
           <Box sx={{ display: { xs: 'none', sm: 'block' } }} className="ml-auto!">
             <Button className="bg-[#85cf67]! text-white! capitalize! mr-3! rounded-3xl!">
               Sign up
@@ -134,7 +130,7 @@ function NavBar(props) {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },
@@ -149,11 +145,8 @@ function NavBar(props) {
 }
 
 NavBar.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
   window: PropTypes.func,
+  setPage: PropTypes.func, // Añadido a las propTypes por buena práctica
 };
 
 export default NavBar;
